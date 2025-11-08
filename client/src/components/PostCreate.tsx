@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 
 export const PostCreate = () => {
-    const [content, setContent] = useState('');
+    const [content, setContent] = useState(''); 
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {

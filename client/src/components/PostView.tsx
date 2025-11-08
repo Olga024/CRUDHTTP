@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 type TPost = {
     id: number;
@@ -10,7 +10,7 @@ type TPost = {
 export const PostView = () => {
     const { id } = useParams();
     const [post, setPost] = useState<TPost | null>(null);
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:7070/posts/${id}`)
@@ -22,7 +22,7 @@ export const PostView = () => {
         fetch(`http://localhost:7070/posts/${id}`, {
             method: 'DELETE'
         })
-            .then(() => history.push('/'));
+            .then(() => navigate('/'));
     };
 
     if (!post) return <div>Загрузка...</div>;

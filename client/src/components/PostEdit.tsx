@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 export const PostEdit = () => {
     const { id } = useParams();
     const [content, setContent] = useState('');
-    const history = useNavigate();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:7070/posts/${id}`)
@@ -12,7 +12,8 @@ export const PostEdit = () => {
             .then(data => setContent(data.content));
     }, [id]);
 
-    const handleSave = () => {
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
         fetch(`http://localhost:7070/posts/${id}`, {
             method: 'PUT',
             headers: {
@@ -20,15 +21,17 @@ export const PostEdit = () => {
             },
             body: JSON.stringify({ id, content })
         })
-            .then(() => history.push(`/posts/${id}`));
+            .then(() => navigate(`/posts/${id}`));
     };
 
     return (
         <div>
             <h1>Редактирование поста</h1>
-            <textarea value={content} onChange={e => setContent(e.target.value)} />
-            <button onClick={handleSave}>Сохранить</button>
-            <button onClick={() => history.push(`/posts/${id}`)}>Отмена</button>
+            <form onSubmit={handleSubmit}>
+                <textarea value={content} onChange={e => setContent(e.target.value)} />
+                <button type="submit">Сохранить</button>
+                <button type="button" onClick={() => navigate(`/posts/${id}`)}>Отмена</button>
+            </form>
         </div>
     );
 };
