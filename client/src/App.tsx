@@ -10,6 +10,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<PostList />} />
+        <Route path="/posts" element={<PostList />} />
         <Route path="/posts/new" element={<PostCreate />} />
         <Route path="/posts/:id" element={<PostView />} />
         <Route path="/posts/:id/edit" element={<PostEdit />} />

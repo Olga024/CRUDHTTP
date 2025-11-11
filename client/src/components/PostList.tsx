@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { API_BASE } from '../config';
+import { apiQuery } from '../api';
 
 type TPost = {
     id: number;
@@ -11,9 +13,16 @@ export const PostList = () => {
     const [posts, setPosts] = useState<TPost[]>([]);
 
     useEffect(() => {
-        fetch('http://localhost:7070/posts')
-            .then(response => response.json())
-            .then(data => setPosts(data));
+        /* 
+          fetch(`${API_BASE}/posts`)
+             .then(response => response.json())
+             .then(data => setPosts(data));
+        */
+        apiQuery({
+                   url: `posts`
+               })
+                   .then(data => setPosts(data))
+                   .catch(console.error);
     }, []);
 
     return (

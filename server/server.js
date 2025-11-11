@@ -62,6 +62,7 @@ app.delete("/posts/:id", (req, res) => {
 });
 
 const port = process.env.PORT || 7070;
+const host = process.env.HOST || "localhost";
 app.listen(port, () =>
-    console.log(`The server is running on http://localhost:${port}`)
+    console.log(`The server is running on http://${host}:${port}`)
 );

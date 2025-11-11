@@ -1,11 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-
-type TPost = {
-    id: number;
-    content: string;
-    created: number;
-};
+import { apiQuery } from '../api';
 
 export const PostView = () => {
     const { id } = useParams();
@@ -13,23 +8,27 @@ export const PostView = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:7070/posts/${id}`)
-            .then(response => response.json())
-            .then(data => setPost(data));
+        apiQuery<{ post: TPost }>({ url: `posts/${id}` })
+            .then(({ post }) => {
+                setPost(post);
+            })
+            .catch(console.error);
     }, [id]);
 
     const handleDelete = () => {
-        fetch(`http://localhost:7070/posts/${id}`, {
+        apiQuery({
+            url: `posts/${id}`,
             method: 'DELETE'
         })
-            .then(() => navigate('/'));
+            .then(() => navigate('/'))
+            .catch(console.error);
     };
 
     if (!post) return <div>Загрузка...</div>;
 
     return (
         <div>
-            <h1>Просмотр поста</h1>
+            <h1><Link to={`/posts`}>←</Link>Просмотр поста</h1>
             <p>{post.content}</p>
             <button onClick={handleDelete}>Удалить</button>
             <Link to={`/posts/${id}/edit`}>Редактировать</Link>

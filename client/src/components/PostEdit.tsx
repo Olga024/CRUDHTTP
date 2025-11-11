@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { API_BASE } from '../config';
+import { apiQuery } from '../api';
 
 export const PostEdit = () => {
     const { id } = useParams();
@@ -7,14 +9,16 @@ export const PostEdit = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:7070/posts/${id}`)
-            .then(response => response.json())
-            .then(data => setContent(data.content));
+        apiQuery<{ post: TPost }>({
+            url: `posts/${id}`
+        })
+            .then(({ post: { content } }) => setContent(content))
+            .catch(console.error);
     }, [id]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        fetch(`http://localhost:7070/posts/${id}`, {
+        fetch(`${API_BASE}/posts/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -28,7 +32,7 @@ export const PostEdit = () => {
         <div>
             <h1>Редактирование поста</h1>
             <form onSubmit={handleSubmit}>
-                <textarea value={content} onChange={e => setContent(e.target.value)} />
+                <textarea rows={5} value={content} onChange={e => setContent(e.target.value)} />
                 <button type="submit">Сохранить</button>
                 <button type="button" onClick={() => navigate(`/posts/${id}`)}>Отмена</button>
             </form>

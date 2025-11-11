@@ -1,20 +1,21 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { apiQuery } from '../api';
 
 export const PostCreate = () => {
-    const [content, setContent] = useState(''); 
+    const [content, setContent] = useState('');
     const navigate = useNavigate();
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        fetch('http://localhost:7070/posts', {
+        apiQuery({
+            url: `posts`,
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ id: 0, content })
+            payload: { id: 0, content },
         })
-            .then(() => navigate('/'));
+            .then(() => navigate('/'))
+            .catch(console.error)
+            .finally(() => navigate('/'));
     };
 
     return (
